@@ -18,7 +18,7 @@ const getUsers = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-    const id = parseInt(request.params.id);
+    const id = parseInt(req.params.id);
 
     pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
         if (error) {
@@ -37,12 +37,12 @@ const createUser = (req, res) => {
             throw error;
         };
 
-        res.status(201).send(`User added with ID: ${id}`);
+        res.status(201).send(`User added with ID: ${results.rows[0].id}`);
     });
 };
 
 const updateUser = (req, res) => {
-    const id = parseInt(request.params.id);
+    const id = parseInt(req.params.id);
     const { name, email } = req.body;
 
     pool.query('UPDATE users set name = $1, email = $2 WHERE id = $3 RETURNING *', [name, email, id], (error, results) => {
@@ -55,7 +55,7 @@ const updateUser = (req, res) => {
 };
 
 const deleteUser = (req, res) => {
-    const id = parseInt(request.params.id);
+    const id = parseInt(req.params.id);
 
     pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
         if (error) {
